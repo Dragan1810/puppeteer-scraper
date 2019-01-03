@@ -19,7 +19,13 @@ function getUrl() {
   const MatchesHeaders = ".group-head.clickable";
   const Divz = await page.$$(MatchesHeaders);
   Divz.forEach(async el => {
-    await el.click();
+    await Promise.all([
+      el.click(".load_more a")
+      //page.waitForNavigation({ waitUntil: "networkidle2" })
+    ]);
+
+    let nesto = await page.evaluate(stuff => stuff.innerHTML, el);
+    console.log(nesto);
   });
 
   const DataBox = ".group-head.clickable.expanded.loaded";
@@ -75,7 +81,36 @@ function getUrl() {
     cleanData.push(data);
   }
 
-  console.log(cleanData);
+  //console.log(cleanData);
 
   //await browser.close();
 })();
+
+/*
+ 
+const puppeteer = require('.');
+
+(async() => {
+  const browser = await puppeteer.launch({headless: false});
+  const page = await browser.newPage();
+  await page.emulate({
+        'viewport': {
+          'width': 1400,
+          'height': 1000,
+          'isMobile': false
+        },
+        'userAgent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+  })
+
+  await page.goto('https://www.kickstarter.com/discover/advanced?sort=newest', {waitUntil: 'networkidle0'});
+
+  await page.click('.load_more a');
+  await page.waitForFunction(() => document.querySelectorAll('div[data-project]').length === 24, {
+    polling: 'mutation'
+  });
+
+  let projectCount = (await page.$$('div[data-project]')).length;
+  console.log(projectCount, ' projects');
+})();
+
+ */
