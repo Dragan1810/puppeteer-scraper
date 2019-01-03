@@ -1,7 +1,7 @@
 const puppeteer = require("puppeteer");
 
 const URL =
-  "http://www.scoresway.com/?sport=soccer&page=matches&date=2018-12-17";
+  "http://www.scoresway.com/?sport=soccer&page=matches&date=2018-12-18";
 
 function getUrl() {
   let sport = "soccer";
@@ -18,14 +18,37 @@ function getUrl() {
 
   const MatchesHeaders = ".group-head.clickable";
   const Divz = await page.$$(MatchesHeaders);
-  Divz.forEach(el => el.click());
+  Divz.forEach(async el => {
+    await el.click();
+  });
 
   const DataBox = ".group-head.clickable.expanded.loaded";
-  const ContentBox = ".even.expanded.first.last.match.no-date-repetition";
 
-  const Content = await page.$$(ContentBox);
+  async function getElements() {
+    const EvenOnlyContent =
+      ".even.expanded.first.last.match.no-date-repetition";
+    const EvenFirstContent = ".even.expanded.first.match.no-date-repetition";
+    const EvenLastContent = ".even.expanded.last.match.no-date-repetition";
+    const EvenContent = ".even.expanded.match.no-date-repetition";
+
+    const OddOnlyContent = ".odd.expanded.first.last.match.no-date-repetition";
+    const OddFirstContent = ".odd.expanded.first.match.no-date-repetition";
+    const OddLastContent = ".odd.expanded.last.match.no-date-repetition";
+    const OddContent = ".odd.expanded.match.no-date-repetition";
+    let e1 = await page.$$(EvenOnlyContent);
+    let e2 = await page.$$(EvenFirstContent);
+    let e3 = await page.$$(EvenLastContent);
+    let e4 = await page.$$(EvenContent);
+    let o1 = await page.$$(OddOnlyContent);
+    let o2 = await page.$$(OddFirstContent);
+    let o3 = await page.$$(OddLastContent);
+    let o4 = await page.$$(OddContent);
+
+    return [...e1, ...e2, ...e3, ...e4, ...o1, ...o2, ...o3, ...o4];
+  }
+  const Content = await getElements();
+
   console.log(Content.length);
-  //const test = await page.evaluate(data => data.innerHTML, Content[1]);
   let cleanData = [];
   let ListData = Content.map(async htmlBlock => {
     const data = await page.evaluate(dataBox => {
