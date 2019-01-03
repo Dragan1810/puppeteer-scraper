@@ -25,37 +25,34 @@ function getUrl() {
 
   const Content = await page.$$(ContentBox);
   console.log(Content.length);
-  const stuff = await page.evaluate(dataBox => {
-    const minute = document
-      .querySelector(".minute")
-      .textContent.replace(/(\r\s\n\t|\n|\r\t)/gm, "")
-      .trim();
-    const teamA = document
-      .querySelector(".team.team-a > a")
-      .textContent.replace(/(\r\s\n\t|\n|\r\t)/gm, "")
-      .trim();
-    const score = document
-      .querySelector(".score-time.score > a")
-      .textContent.replace(/(\r\s\n\t|\n|\r\t)/gm, "")
-      .trim();
-    const teamB = document
-      .querySelector(".team.team-b > a")
-      .textContent.replace(/(\r\s\n\t|\n|\r\t)/gm, "")
-      .trim();
+  //const test = await page.evaluate(data => data.innerHTML, Content[1]);
+  let cleanData = [];
+  let ListData = Content.map(async htmlBlock => {
+    const data = await page.evaluate(dataBox => {
+      const minute = dataBox
+        .querySelector(".minute")
+        .textContent.replace(/(\s)/gm, "");
+      const teamA = dataBox
+        .querySelector(".team.team-a > a")
+        .textContent.replace(/(\s)/gm, "");
+      const score = dataBox
+        .querySelector(".score-time.score > a")
+        .textContent.replace(/(\s)/gm, "");
+      const teamB = dataBox
+        .querySelector(".team.team-b > a")
+        .textContent.replace(/(\s)/gm, "");
 
-    return { minute, teamA, teamB, score };
-  }, Content[0]);
-  console.log(stuff);
-  /*
-  // Extract the results from the page.
-  const links = await page.evaluate(resultsSelector => {
-    const anchors = Array.from(document.querySelectorAll(resultsSelector));
-    return anchors.map(anchor => {
-      const title = anchor.textContent.split("|")[0].trim();
-      return `${title} - ${anchor.href}`;
-    });
-  }, resultsSelector);
-  console.log(links.join("\n"));
-*/
+      return { minute, teamA, teamB, score };
+    }, htmlBlock);
+
+    return data;
+  });
+
+  for await (data of ListData) {
+    cleanData.push(data);
+  }
+
+  console.log(cleanData);
+
   //await browser.close();
 })();
