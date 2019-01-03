@@ -5,6 +5,9 @@
   "repository": "https://github.com/Dragan1810/puppeteer-scraper.git",
   "author": "dragan1810 <d.novakovic1810@yahoo.com>",
   "license": "MIT",
+  "scripts": {
+    "s": "node index"
+  },
   "dependencies": {
     "puppeteer": "^1.11.0"
   }
