@@ -1,0 +1,11 @@
+{
+  "name": "puppeteer-scraper",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "https://github.com/Dragan1810/puppeteer-scraper.git",
+  "author": "dragan1810 <d.novakovic1810@yahoo.com>",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^1.11.0"
+  }
+}
