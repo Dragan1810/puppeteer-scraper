@@ -23,11 +23,8 @@ function getUrl() {
   const DataBox = ".group-head.clickable.expanded.loaded";
   const ContentBox = "even.expanded.first.last.match.no-date-repetition";
 
-  const X = await page
-    .waitForSelector(Content)
-    .catch(() => console.error("ERR"));
-  const Content = await page.$$(ContentBox);
-  console.log(X);
+  //const Content = await page.$$(DataBox);
+  console.log([...document.querySelectorAll(ContentBox)].length);
 
   /*
   // Extract the results from the page.
