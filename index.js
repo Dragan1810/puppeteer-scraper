@@ -19,16 +19,24 @@ function getUrl() {
   const MatchesHeaders = ".group-head.clickable";
   const Divz = await page.$$(MatchesHeaders);
   Divz.forEach(async el => {
-    await Promise.all([
-      el.click(".load_more a")
-      //page.waitForNavigation({ waitUntil: "networkidle2" })
-    ]);
+    await el.click(".load_more a");
+    //page.waitForNavigation({ waitUntil: "networkidle2" })
 
     let nesto = await page.evaluate(stuff => stuff.innerHTML, el);
-    console.log(nesto);
+    //console.log(nesto);
   });
 
-  const DataBox = ".group-head.clickable.expanded.loaded";
+  async function getHeader() {
+    const headClickExpanded = ".group-head.clickable.expanded.loaded";
+    const headClick = ".group-head.clickable.loaded";
+    const headExpanded = ".group-head.expanded.loaded";
+
+    let h1 = await page.$$(headClick);
+    let h2 = await page.$$(headClickExpanded);
+    let h3 = await page.$$(headExpanded);
+
+    return [...h1, ...h2, ...h3];
+  }
 
   async function getElements() {
     const EvenOnlyContent =
