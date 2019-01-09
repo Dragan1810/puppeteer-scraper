@@ -16,16 +16,6 @@ function getUrl() {
   const page = await browser.newPage();
   await page.goto(URL);
 
-  const MatchesHeaders = ".group-head.clickable";
-  const Divz = await page.$$(MatchesHeaders);
-  Divz.forEach(async el => {
-    await el.click(".load_more a");
-    //page.waitForNavigation({ waitUntil: "networkidle2" })
-
-    let nesto = await page.evaluate(stuff => stuff.innerHTML, el);
-    //console.log(nesto);
-  });
-
   async function getHeader() {
     const headClickExpanded = ".group-head.clickable.expanded.loaded";
     const headClick = ".group-head.clickable.loaded";
@@ -60,6 +50,22 @@ function getUrl() {
 
     return [...e1, ...e2, ...e3, ...e4, ...o1, ...o2, ...o3, ...o4];
   }
+
+  const ResultData = [];
+
+  const HeadersContent = await getHeader();
+
+  const MatchesHeaders = ".group-head.clickable";
+  const Headers = await page.$$(MatchesHeaders);
+
+  Headers.forEach(async el => {
+    await el.click(".load_more a");
+    //page.waitForNavigation({ waitUntil: "networkidle2" })
+    // header
+    let nesto = await page.evaluate(stuff => stuff.innerHTML, el);
+    console.log(nesto);
+  });
+
   const Content = await getElements();
 
   console.log(Content.length);
